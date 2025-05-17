@@ -1,0 +1,49 @@
+{
+  "name": "bomacronode",
+  "displayName": "bo Macro Node.js",
+  "description": "Execution d'un module node.js en Macro.",
+  "version": "1.0.0",
+   "icon": "ressource/icone.png",
+  "publisher": "borakLeRouge",
+  "engines": {
+    "vscode": "^1.80.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [],
+  "main": "./ressource/extension.js",
+  "contributes": {
+    "commands": [{
+      "command": "bomacronode.macroNode",
+      "title": "Macro Node.js"
+    }],
+    "menus": {
+      "editor/context": [
+        { "command": "bomacronode.macroNode",
+          "when": "resourceLangId == javascript",
+          "group": "macro@0"
+        }
+      ],
+      "commandPalette": [
+        {	"command": "bomacronode.macroNode",
+					"when": "resourceLangId == javascript"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "pretest": "npm run lint",
+    "test": "node ./test/runTest.js"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.80.0",
+    "@types/glob": "^8.1.0",
+    "@types/node": "16.x",
+    "eslint": "^8.34.0",
+    "glob": "^8.1.0",
+    "typescript": "^4.9.5",
+    "@vscode/test-electron": "^2.2.3"
+  }
+}
