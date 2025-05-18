@@ -1,6 +1,6 @@
 {
   "name": "bomacronode",
-  "displayName": "bo Macro Node.js",
+  "displayName": "boMacro Node.js",
   "description": "Execution d'un module node.js en Macro.",
   "version": "1.1.0",
    "icon": "ressource/icone.png",
