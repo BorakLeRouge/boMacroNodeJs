@@ -12,6 +12,8 @@ En paramètre des fonctions, on rencontre les paramètres suivants :
     - routines.dossierWorkspace() : Pour récupérer l'adresse du workspace en cours.
     - routines.resolutionChemin() : Pour résoudre un chemin relatif dans le workspace.
     - await routines.ouvrirEditeurATraiter() : Qui demande à ouvrir un nouveau fichier pour en récupérer l'adresse.
+    - await routines.choisirFichier('Choisir un fichier...',{'Images': ['png', 'jpg', 'gif']}) : Choix d'un fichier
+    - await routines.choisirDossier('Choisir un Dossier...') : choix d'un dossier
 
 On peut aussi déclarer une fonction "init" qui sera directement executé sans choix préalable.
 
@@ -32,8 +34,9 @@ Exemple 1 :
         affich('GROS COUCOU') ;
         affich(routines.dossierWorkspace()) ;
         affich(routines.resolutionChemin('./TOTO')) ;
-        affich(await routines.ouvrirEditeurATraiter())
-        clog('GROS COUCOU') ;
+        affich(await routines.ouvrirEditeurATraiter()) ;
+        affich(await routines.choisirFichier('Choisir un fichier...',{'Images': ['png', 'jpg', 'gif']})),
+        affich(await routines.choisirDossier('Choisir un Dossier...')),
         show() ;
     }
     // * * * Exemple de fonction * * * 

@@ -6,6 +6,16 @@ const fs      = require('fs') ;
 const relance = '* * * Relancer VsCode * * *' ;
 const outputMngr = require('./outputMngr.js') ;
 
+// ===================================================================================
+//  M   M   OOO   DDD    U   U  L      EEEEE       M   M    A     CCC   RRRR    OOO
+//  MM MM  O   O  D  D   U   U  L      E           MM MM   A A   C   C  R   R  O   O
+//  M M M  O   O  D   D  U   U  L      EEE         M M M  A   A  C      R   R  O   O
+//  M   M  O   O  D   D  U   U  L      E           M   M  AAAAA  C      RRRR   O   O
+//  M   M  O   O  D  D   U   U  L      E           M   M  A   A  C   C  R  R   O   O
+//  M   M   OOO   DDD     UUU   LLLLL  EEEEE       M   M  A   A   CCC   R   R   OOO
+// ===================================================================================
+// * * * Module Macro
+
 exports.macro = async function macro(context) { 
     // * * Sorties * * 
     const clog       = require('./clog.js').clog ;
@@ -33,7 +43,9 @@ exports.macro = async function macro(context) {
         show: outputMngr.show,
         dossierWorkspace,
         resolutionChemin,
-        ouvrirEditeurATraiter
+        ouvrirEditeurATraiter,
+        choisirFichier,
+        choisirDossier
     }
 
     // * * Preparation selecteur * * 
@@ -76,9 +88,22 @@ exports.macro = async function macro(context) {
 
 }
 
+
+// ==============================================================
+//  FFFFF   OOO   N   N   CCC   TTTTT  III   OOO   N   N   SSS
+//  F      O   O  NN  N  C   C    T     I   O   O  NN  N  S
+//  FFF    O   O  N N N  C        T     I   O   O  N N N   SSS
+//  F      O   O  N  NN  C        T     I   O   O  N  NN      S
+//  F      O   O  N   N  C   C    T     I   O   O  N   N      S
+//  F       OOO   N   N   CCC     T    III   OOO   N   N  SSSS
+// ==============================================================
+// * * * Fonctions
+
+// Le dossier principal du workspace
 const dossierWorkspace = function() {
     return vscode.workspace.workspaceFolders[0].uri.fsPath ;
 } 
+// Calcul d'un chemin à partir d'une adresse relative
 const resolutionChemin = function(chemin) {
     if (chemin.substring(0,2) == './' || chemin.substring(0,3) == '../') {
         return path.join(dossierWorkspace() + '/' + chemin) ;
@@ -86,6 +111,7 @@ const resolutionChemin = function(chemin) {
         return path.join(chemin) ;
     }
 }
+// Ouvrir un autre editeur pour traitement
 const ouvrirEditeurATraiter = async function() {
     let base = vscode.window.activeTextEditor.document.uri.fsPath ;
     let result = await vscode.window.showQuickPick([
@@ -100,5 +126,38 @@ const ouvrirEditeurATraiter = async function() {
         return undefined ;
     } else {
         return vscode.window.activeTextEditor.document.uri.fsPath ;
+    }
+}
+// Choisir un fichier
+const choisirFichier = async function(libelle, filtre) {
+    const options = {
+        canSelectMany: false,
+        canSelectFiles: true,
+        canSelectFolders: false,
+        defaultUri: vscode.workspace.workspaceFolders[0].uri,
+        openLabel: libelle,
+        filters: filtre
+    };
+    const fileUri = await vscode.window.showOpenDialog(options);
+    if (fileUri && fileUri[0]) {
+        return fileUri[0].fsPath ;
+    } else {
+        return undefined ;
+    }
+}
+// Choisir un dossier
+const choisirDossier = async function(libelle) {
+    const options = {
+        canSelectMany: false,
+        canSelectFiles: false,
+        canSelectFolders: true,
+        defaultUri: vscode.workspace.workspaceFolders[0].uri,
+        openLabel: libelle
+    };
+    const fileUri = await vscode.window.showOpenDialog(options);
+    if (fileUri && fileUri[0]) {
+        return fileUri[0].fsPath ;
+    } else {
+        return undefined ;
     }
 }

@@ -12,8 +12,9 @@ let gros_COUCOU = async function(context, affich, clog, routines) {
     affich('GROS COUCOU') ;
     affich(routines.dossierWorkspace()) ;
     affich(routines.resolutionChemin('./TOTO')) ;
-    affich(await routines.ouvrirEditeurATraiter())
-    clog('GROS COUCOU') ;
+    affich(await routines.ouvrirEditeurATraiter()) ;
+    affich(await routines.choisirFichier('Choisir un fichier...',{'Images': ['png', 'jpg', 'gif']})),
+    affich(await routines.choisirDossier('Choisir un Dossier...')),
     show() ;
 }
 // * * * Exemple de fonction * * * 
