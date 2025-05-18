@@ -3,13 +3,12 @@
 const vscode  = require('vscode') ;
 const path    = require('path') ;
 const fs      = require('fs') ;
-const { interfaces } = require('mocha');
 const relance = '* * * Relancer VsCode * * *' ;
+const outputMngr = require('./outputMngr.js') ;
 
 exports.macro = async function macro(context) { 
     // * * Sorties * * 
     const clog       = require('./clog.js').clog ;
-    const outputMngr = require('./outputMngr.js') ;
     outputMngr.setContext(context) ;
     outputMngr.clear(true) ;
 
@@ -29,6 +28,14 @@ exports.macro = async function macro(context) {
     // * * Require Node * *
     const module = require(fichier) ;
 
+    // * * Routines à passer * *
+    let routines = {
+        show: outputMngr.show,
+        dossierWorkspace,
+        resolutionChemin,
+        ouvrirEditeurATraiter
+    }
+
     // * * Preparation selecteur * * 
     let listeOptions = [] ;
     let initPresent  = false ;
@@ -37,7 +44,7 @@ exports.macro = async function macro(context) {
             clog('Init     : présent') ;
             outputMngr.affich('Init     : présent') ;
             initPresent = true ;
-            await module.init(context, outputMngr.affich, clog, outputMngr.show) ; 
+            await module.init(context, outputMngr.affich, clog, routines) ; 
         } else {
             listeOptions.push({label: 'fonction : '+ mc, value: mc}) ;
         }
@@ -56,7 +63,7 @@ exports.macro = async function macro(context) {
                 outputMngr.affich('Fonction : "'+ choix + '"') ;
                 outputMngr.affich('********************************************************************') ;
                 clog('Fonction : '+ choix) ;
-                await module[choix](context, outputMngr.affich, clog) ;
+                await module[choix](context, outputMngr.affich, clog, routines) ;
                 outputMngr.affich('* * * Retour Appel "'+choix+'" * * *') ;
                 clog('* * * Retour Appel "'+choix+'" * * *') ;
             }
@@ -67,4 +74,31 @@ exports.macro = async function macro(context) {
         clog('* * * Retour Appel "init" * * *') ;
     }
 
+}
+
+const dossierWorkspace = function() {
+    return vscode.workspace.workspaceFolders[0].uri.fsPath ;
+} 
+const resolutionChemin = function(chemin) {
+    if (chemin.substring(0,2) == './' || chemin.substring(0,3) == '../') {
+        return path.join(dossierWorkspace() + '/' + chemin) ;
+    } else {
+        return path.join(chemin) ;
+    }
+}
+const ouvrirEditeurATraiter = async function() {
+    let base = vscode.window.activeTextEditor.document.uri.fsPath ;
+    let result = await vscode.window.showQuickPick([
+            { label: "Oui, un nouveau fichier est édité", value: 'Oui' },
+            { label: "Annuler", value: 'Annuler' }
+        ],
+        {title: 'Editer le fichier à traiter :', ignoreFocusOut: true}
+    );
+
+    if (result.value == 'Annuler' || base == vscode.window.activeTextEditor.document.uri.fsPath) {
+        outputMngr.affich('Pas de fichier ouvert !')
+        return undefined ;
+    } else {
+        return vscode.window.activeTextEditor.document.uri.fsPath ;
+    }
 }

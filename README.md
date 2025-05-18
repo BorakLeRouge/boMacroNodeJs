@@ -8,39 +8,56 @@ En paramètre des fonctions, on rencontre les paramètres suivants :
 - context : Le contexte vscode
 - affich : une fonction qui permet d'ecrire dans la sortie "Macro Node.js"
 - clog : une fonction pour écrire dans la console.
+- routines : qui contient des fonctions complémentaires :
+    - routines.dossierWorkspace() : Pour récupérer l'adresse du workspace en cours.
+    - routines.resolutionChemin() : Pour résoudre un chemin relatif dans le workspace.
+    - await routines.ouvrirEditeurATraiter() : Qui demande à ouvrir un nouveau fichier pour en récupérer l'adresse.
 
 On peut aussi déclarer une fonction "init" qui sera directement executé sans choix préalable.
-Avec un paramètre supplémentaire :
-- show : Fonction qui permet d'afficher la sortie "Macro Node.js"
 
 ## Exemples de fichier macro :
 
 Exemple 1 :
 
+    // * * * Fonction d'initialisation automatique * * *
+    let affich, clog, show ;
+    let init = async function(context, affichFn, clogFn, routines) {
+        if (affichFn != undefined)        { affich = affichFn ; }
+        if (clogFn !=   undefined)        { clog   = clogFn ; }
+        if (routines.show !=   undefined) { show = routines.show ; }
+    }
 
     // * * * Exemple de fonction * * * 
-    let gros_COUCOU = async function(context, affich) {
+    let gros_COUCOU = async function(context, affich, clog, routines) {
         affich('GROS COUCOU') ;
+        affich(routines.dossierWorkspace()) ;
+        affich(routines.resolutionChemin('./TOTO')) ;
+        affich(await routines.ouvrirEditeurATraiter())
+        clog('GROS COUCOU') ;
+        show() ;
     }
     // * * * Exemple de fonction * * * 
-    let petit_Coucou = async function(context, affich, clog) {
+    let petit_Coucou = async function(context, affich) {
         affich('petit coucou') ;
-        clog('petit coucou') ;
     }
     // * * * Export des fonctions * * * 
     module.exports = {
-        gros_COUCOU, petit_Coucou
+        init, gros_COUCOU, petit_Coucou
     }
 
 Exemple 2 :
 
-    // * * * Fonction d'execution automatique * * *
+    // * * * Fonction d'initialisation automatique * * *
     let affich, clog, show ;
-    let init = async function(context, affichFn, clogFn, showFn) {
-        if (affichFn != undefined) { affich = affichFn ; }
-        if (clogFn !=   undefined) { clog   = clogFn ; }
-        if (showFn !=   undefined) { show   = showFn ; }
+    let init = async function(context, affichFn, clogFn, routines) {
+        if (affichFn != undefined)        { affich = affichFn ; }
+        if (clogFn !=   undefined)        { clog   = clogFn ; }
+        if (routines.show !=   undefined) { show = routines.show ; }
+        affich(' ') ;
         affich('Coucou, execution automatique') ;
+        affich(routines.dossierWorkspace()) ;
+        affich(routines.resolutionChemin('./TOTO')) ;
+        affich('') ;
     }
 
     // * * * Export des fonctions * * * 

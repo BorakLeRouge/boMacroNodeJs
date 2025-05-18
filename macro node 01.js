@@ -1,20 +1,24 @@
 
 // * * * Fonction d'initialisation automatique * * *
 let affich, clog, show ;
-let init = async function(context, affichFn, clogFn, showFn) {
-    if (affichFn != undefined) { affich = affichFn ; }
-    if (clogFn !=   undefined) { clog   = clogFn ; }
-    if (showFn !=   undefined) { show   = showFn ; }
+let init = async function(context, affichFn, clogFn, routines) {
+    if (affichFn != undefined)        { affich = affichFn ; }
+    if (clogFn !=   undefined)        { clog   = clogFn ; }
+    if (routines.show !=   undefined) { show = routines.show ; }
 }
 
 // * * * Exemple de fonction * * * 
-let gros_COUCOU = async function(context, affich) {
+let gros_COUCOU = async function(context, affich, clog, routines) {
     affich('GROS COUCOU') ;
+    affich(routines.dossierWorkspace()) ;
+    affich(routines.resolutionChemin('./TOTO')) ;
+    affich(await routines.ouvrirEditeurATraiter())
+    clog('GROS COUCOU') ;
+    show() ;
 }
 // * * * Exemple de fonction * * * 
-let petit_Coucou = async function(context, affich, clog) {
+let petit_Coucou = async function(context, affich) {
     affich('petit coucou') ;
-    clog('petit coucou') ;
 }
 // * * * Export des fonctions * * * 
 module.exports = {
