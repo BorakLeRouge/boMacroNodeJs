@@ -45,7 +45,8 @@ exports.macro = async function macro(context) {
         resolutionChemin,
         ouvrirEditeurATraiter,
         choisirFichier,
-        choisirDossier
+        choisirDossier,
+        dateHeureDuJour
     }
 
     // * * Preparation selecteur * * 
@@ -160,4 +161,18 @@ const choisirDossier = async function(libelle) {
     } else {
         return undefined ;
     }
+}
+// Date et Heure du jour
+const dateHeureDuJour = function(format) {
+    let dt = new Date() ;
+    let hh = (''+dt.getHours()).padStart(2,'0') ;
+    let mm = (''+dt.getMinutes()).padStart(2,'0') ;
+    let ss = (''+dt.getSeconds()).padStart(2,'0') ;
+    let JJ = (''+dt.getDate()).padStart(2,'0') ;
+    let MM = (''+(1+dt.getMonth())).padStart(2,'0') ;
+    let SSAA = (''+dt.getFullYear()).padStart(2,'0') ;
+    let AA = SSAA.slice(2) ;
+    format = format.replace('SSAA', SSAA).replace('AA', AA).replace('MM', MM).replace('JJ', JJ)
+    format = format.replace('hh', hh).replace('mm', mm).replace('ss', ss) ;
+    return format ;
 }

@@ -14,6 +14,7 @@ En paramètre des fonctions, on rencontre les paramètres suivants :
     - await routines.ouvrirEditeurATraiter() : Qui demande à ouvrir un nouveau fichier pour en récupérer l'adresse.
     - await routines.choisirFichier('Choisir un fichier...',{'Images': ['png', 'jpg', 'gif']}) : Choix d'un fichier
     - await routines.choisirDossier('Choisir un Dossier...') : choix d'un dossier
+    - routines.dateHeureDuJour('SSAA-MM-JJ hh:mm:ss') : Pour récupérer une date du jour formatée.
 
 On peut aussi déclarer une fonction "init" qui sera directement executé sans choix préalable.
 
@@ -22,11 +23,11 @@ On peut aussi déclarer une fonction "init" qui sera directement executé sans c
 Exemple 1 :
 
     // * * * Fonction d'initialisation automatique * * *
-    let affich, clog, show ;
-    let init = async function(context, affichFn, clogFn, routines) {
-        if (affichFn != undefined)        { affich = affichFn ; }
-        if (clogFn !=   undefined)        { clog   = clogFn ; }
-        if (routines.show !=   undefined) { show = routines.show ; }
+    let affich, clog, routines ;
+    let init = async function(context, affichFn, clogFn, routinesFn) {
+        if (affichFn   != undefined)  { affich = affichFn ; }
+        if (clogFn     != undefined)  { clog   = clogFn ; }
+        if (routinesFn != undefined)  { routines = routinesFn ; }
     }
 
     // * * * Exemple de fonction * * * 
@@ -37,7 +38,8 @@ Exemple 1 :
         affich(await routines.ouvrirEditeurATraiter()) ;
         affich(await routines.choisirFichier('Choisir un fichier...',{'Images': ['png', 'jpg', 'gif']})),
         affich(await routines.choisirDossier('Choisir un Dossier...')),
-        show() ;
+        affich(routines.dateHeureDuJour('SSAA-MM-JJ hh:mm:ss')) ;
+        routines.show() ;
     }
     // * * * Exemple de fonction * * * 
     let petit_Coucou = async function(context, affich) {
@@ -51,16 +53,15 @@ Exemple 1 :
 Exemple 2 :
 
     // * * * Fonction d'initialisation automatique * * *
-    let affich, clog, show ;
-    let init = async function(context, affichFn, clogFn, routines) {
+    let affich, clog, routines ;
+    let init = async function(context, affichFn, clogFn, routinesFn) {
         if (affichFn != undefined)        { affich = affichFn ; }
         if (clogFn !=   undefined)        { clog   = clogFn ; }
-        if (routines.show !=   undefined) { show = routines.show ; }
+        if (routinesFn != undefined)      { routines = routinesFn ; }
         affich(' ') ;
         affich('Coucou, execution automatique') ;
         affich(routines.dossierWorkspace()) ;
         affich(routines.resolutionChemin('./TOTO')) ;
-        affich('') ;
     }
 
     // * * * Export des fonctions * * * 
