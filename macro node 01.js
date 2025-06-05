@@ -15,6 +15,7 @@ let gros_COUCOU = async function(context, affich, clog, routines) {
     affich(await routines.choisirFichier('Choisir un fichier...',{'Images': ['png', 'jpg', 'gif']})),
     affich(await routines.choisirDossier('Choisir un Dossier...')),
     affich(routines.dateHeureDuJour('SSAA-MM-JJ hh:mm:ss')) ;
+    affich(routines.execCMD('ls -al')) ;
     routines.show() ;
 }
 // * * * Exemple de fonction * * * 

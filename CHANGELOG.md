@@ -1,5 +1,9 @@
 # Evolutions de l'extension
 
+## [1.3.0] 17/05/2025
+
+- Exec Commande ajouté.
+
 ## [1.1.0] 17/05/2025
 
 - Ajout d'un objet routines.

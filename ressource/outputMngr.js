@@ -33,7 +33,7 @@ const clear = function(show = false) {
     }
     outputMngr.outputC.clear() ;
     if (outputMngr.context != '') {
-        outputMngr.outputC.appendLine(getTime() + ' - ' + outputMngr.context.extension.packageJSON.name + ' - v' + outputMngr.context.extension.packageJSON.version ) ;
+        outputMngr.outputC.appendLine(getTime() + ' - ' + outputMngr.context?.extension?.packageJSON?.name + ' - v' + outputMngr.context?.extension?.packageJSON?.version ) ;
     }
     if (show) {
         outputMngr.outputC.show() ;
@@ -45,7 +45,11 @@ const affich = function(message) {
     if (outputMngr.outputC == '') {
         clear() ;
     }
-    outputMngr.outputC.appendLine(getTime() + ' - ' + message) ;
+    if(typeof(message) == 'object') {
+        outputMngr.outputC.appendLine(getTime() + ' - ' + JSON.stringify(message,undefined,3)) ;
+    } else {
+        outputMngr.outputC.appendLine(getTime() + ' - ' + message) ;
+    }
 }
 
 const getTime = function() {

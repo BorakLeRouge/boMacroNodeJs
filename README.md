@@ -15,6 +15,7 @@ En paramètre des fonctions, on rencontre les paramètres suivants :
     - await routines.choisirFichier('Choisir un fichier...',{'Images': ['png', 'jpg', 'gif']}) : Choix d'un fichier
     - await routines.choisirDossier('Choisir un Dossier...') : choix d'un dossier
     - routines.dateHeureDuJour('SSAA-MM-JJ hh:mm:ss') : Pour récupérer une date du jour formatée.
+    - routines.execCmd('Sgit status') : Pour passer une commande terminal.
 
 On peut aussi déclarer une fonction "init" qui sera directement executé sans choix préalable.
 
@@ -39,6 +40,7 @@ Exemple 1 :
         affich(await routines.choisirFichier('Choisir un fichier...',{'Images': ['png', 'jpg', 'gif']})),
         affich(await routines.choisirDossier('Choisir un Dossier...')),
         affich(routines.dateHeureDuJour('SSAA-MM-JJ hh:mm:ss')) ;
+        affich(routines.execCMD('ls -al')) ;
         routines.show() ;
     }
     // * * * Exemple de fonction * * * 
@@ -62,6 +64,9 @@ Exemple 2 :
         affich('Coucou, execution automatique') ;
         affich(routines.dossierWorkspace()) ;
         affich(routines.resolutionChemin('./TOTO')) ;
+        affich(await routines.ouvrirEditeurATraiter()) ;
+        affich(routines.dateHeureDuJour('SSAA-MM-JJ hh:mm:ss')) ;
+        affich(routines.execCMD('ls -al')) ;
     }
 
     // * * * Export des fonctions * * * 
