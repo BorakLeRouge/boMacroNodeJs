@@ -7,6 +7,8 @@ const relance = '* * * Relancer VsCode * * *' ;
 const outputMngr = require('./outputMngr.js') ;
 const clog       = require('./clog.js').clog ;
  
+const referenceModule = [] ;
+ 
 // ===================================================================================
 //  M   M   OOO   DDD    U   U  L      EEEEE       M   M    A     CCC   RRRR    OOO
 //  MM MM  O   O  D  D   U   U  L      E           MM MM   A A   C   C  R   R  O   O
@@ -29,13 +31,21 @@ exports.macro = async function macro(context) {
     clog('Macro    : ' + fichier) ;
    
     // * * Lecture * *
-    let contenu = fs.readFileSync(fichier, 'utf8') ;
-    let lastPos = contenu.lastIndexOf('module.exports') ;
-    contenu = contenu.substring(lastPos).split('{')[1].split('}')[0] ;
-    contenu = contenu.replaceAll(' ', '').replaceAll("\r", '').replaceAll("\n", '') ;
-    let listeFonctions = contenu.split(',') ;
+    let contenu   = fs.readFileSync(fichier, 'utf8') ;
+    let lastPos   = contenu.lastIndexOf('module.exports') ;
+    let fonctions = contenu.substring(lastPos).split('{')[1].split('}')[0] ;
+    fonctions = fonctions.replaceAll(' ', '').replaceAll("\r", '').replaceAll("\n", '') ;
+    let listeFonctions = fonctions.split(',') ;
  
     // * * Require Node * *
+    if (referenceModule[nomModule] == undefined) {
+        outputMngr.affich('Importation de la macro.') ;
+        referenceModule[nomModule] = contenu ;
+    } else if(referenceModule[nomModule] != contenu) {
+        outputMngr.affich('Ré-importation de la macro.') ;
+        referenceModule[nomModule] = contenu ;
+        delete require.cache[require.resolve(fichier)];
+    }
     const module = require(fichier) ;
  
     // * * Routines à passer * *
@@ -71,7 +81,7 @@ exports.macro = async function macro(context) {
         }
     }
     if (listeOptions.length > 0) {
-        listeOptions.push({label: relance, value: relance})
+        // listeOptions.push({label: relance, value: relance}) // Option pour relancer VsCode (plus nécéssaire)
  
         // * * Liste déroulante : Le plus simple * *
         let result = await vscode.window.showQuickPick(listeOptions, {title: 'Choisisser la macro :', ignoreFocusOut: true});
@@ -102,7 +112,6 @@ exports.macro = async function macro(context) {
     }
  
 }
-
  
 // ==============================================================
 //  FFFFF   OOO   N   N   CCC   TTTTT  III   OOO   N   N   SSS

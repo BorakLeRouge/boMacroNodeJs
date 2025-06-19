@@ -2,7 +2,7 @@
   "name": "bomacronode",
   "displayName": "boMacro Node.js",
   "description": "Execution d'un module node.js en Macro.",
-  "version": "1.4.1",
+  "version": "1.5.0",
    "icon": "ressource/icone.png",
   "publisher": "borakLeRouge",
   "repository": {
