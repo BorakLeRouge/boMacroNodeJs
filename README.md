@@ -16,6 +16,11 @@ En paramètre des fonctions, on rencontre les paramètres suivants :
     - await routines.choisirDossier('Choisir un Dossier...') : choix d'un dossier
     - routines.dateHeureDuJour('SSAA-MM-JJ hh:mm:ss') : Pour récupérer une date du jour formatée.
     - routines.execCmd('Sgit status') : Pour passer une commande terminal.
+    - routines.fs : le module fs
+    - routines.path : le module path
+    - routines.iconv : le module iconv-lite
+    - routines.readFileSync(fichier, encodage) : pour lire un fichier avec tout les encodages possibles.
+    - routines.writeFileSync(fichier, contenu, encodage) : pour écrire un fichier avec tout les encodages possibles.
 
 On peut aussi déclarer une fonction "init" qui sera directement executé sans choix préalable.
 

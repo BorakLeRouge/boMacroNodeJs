@@ -3,6 +3,7 @@
 const vscode  = require('vscode') ;
 const path    = require('path') ;
 const fs      = require('fs') ;
+const iconv   = require('iconv-lite') ;
 const relance = '* * * Relancer VsCode * * *' ;
 const outputMngr = require('./outputMngr.js') ;
 const clog       = require('./clog.js').clog ;
@@ -57,7 +58,9 @@ exports.macro = async function macro(context) {
         choisirFichier,
         choisirDossier,
         dateHeureDuJour,
-        execCmd
+        execCmd,
+        iconv, fs, path,
+        readFileSync, writeFileSync
     }
  
     // * * Preparation selecteur * *
@@ -214,4 +217,19 @@ const execCmd = function(cmd, timeLimit=180000) {
         outputMngr.affich(err) ;
         return ;
     }
+}
+// Lecture / Ecriture avec Encodage iconv
+const readFileSync = function(file, encod='utf8') {
+    if (['utf8', 'utf-8'].includes(encod.toLowerCase()))       { encod = 'utf8' ;}
+    if (['latin15', 'latin-15'].includes(encod.toLowerCase())) { encod = 'ISO-8859-15' ;}
+    if (['latin1', 'latin-1'].includes(encod.toLowerCase()))   { encod = 'ISO-8859-1' ;}
+    let cont = fs.readFileSync(file) ;
+    return iconv.decode(cont, encod) ;
+}
+const writeFileSync = function(file, contenu, encod='utf8') {
+    if (['utf8', 'utf-8'].includes(encod.toLowerCase()))       { encod = 'utf8' ;}
+    if (['latin15', 'latin-15'].includes(encod.toLowerCase())) { encod = 'ISO-8859-15' ;}
+    if (['latin1', 'latin-1'].includes(encod.toLowerCase()))   { encod = 'ISO-8859-1' ;}
+    let cont = iconv.encode(contenu, encod) ;
+    fs.writeFileSync(file, cont) ;
 }

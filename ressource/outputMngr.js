@@ -41,14 +41,19 @@ const clear = function(show = false) {
 }
 
 // Affichage du message
-const affich = function(message) {
+const affich = function(...tbMessage) {
     if (outputMngr.outputC == '') {
         clear() ;
     }
-    if(typeof(message) == 'object') {
-        outputMngr.outputC.appendLine(getTime() + ' - ' + JSON.stringify(message,undefined,3)) ;
-    } else {
-        outputMngr.outputC.appendLine(getTime() + ' - ' + message) ;
+    let time = getTime() ;
+    for (let message of tbMessage) {
+        if(typeof(message) == 'object') {
+            outputMngr.outputC.appendLine(time + ' - ' + JSON.stringify(message,undefined,3)) ;
+            time = '            ' ;
+        } else {
+            outputMngr.outputC.appendLine(time + ' - ' + message) ;
+            time = '            ' ;
+        }
     }
 }
 
